@@ -19,7 +19,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'users',
-    'djoser'   
+    'djoser',
+    'recipes',
+    'django_filters',
 ]
 
 
@@ -121,5 +123,14 @@ DJOSER = {
        'PERMISSIONS': {
            'user': ['rest_framework.permissions.IsAuthenticated'],
            'user_list': ['rest_framework.permissions.AllowAny']           
-       }
+       },
+       'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
    }
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'viktrols0506@gmail.com'
+EMAIL_HOST_PASSWORD = 'lurmuvfxkeysqvoq'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
