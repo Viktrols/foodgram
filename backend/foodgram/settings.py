@@ -3,9 +3,9 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-4e-6h1o^28f3u4rma(vj_99*p!j9g=1ojao_f53^iyqx0u_x7n'
+SECRET_KEY = os.getenv('SECRET_KEY', default='django-insecure-4e-6h1o^28f3u4rma(vj_99*p!j9g=1ojao_f53^iyqx0u_x7n')
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -25,10 +25,7 @@ INSTALLED_APPS = [
     'django_filters',
 ]
 
-
 AUTH_USER_MODEL = 'users.User'
-
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -60,14 +57,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
-
 DATABASES = {
     'default': {
         'ENGINE': os.environ.get('ENGINE', default='django.db.backends.postgresql'),
-        'NAME': os.environ.get('NAME', default='foodgram'),
-        'USER': os.environ.get('USER', default='postgres'),
-        'PASSWORD': os.environ.get('PASSWORD', default='test0101'),
-        'HOST': os.environ.get('DB_HOST', default='localhost'),
+        'NAME': os.environ.get('NAME', default='postgres'),
+        'USER': os.environ.get('POSTGRES_USER', default='postgres'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', default='postgres'),
+        'HOST': os.environ.get('DB_HOST', default='db'),
         'PORT': os.environ.get('DB_PORT', default=5432)
     }
 }
@@ -99,18 +95,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-STATIC_URL = '/static/'
-
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-from rest_framework.pagination import PageNumberPagination
-
-
-class StandardResultsSetPagination(PageNumberPagination):
-    page_size_query_param = 'limit'
 
 
 REST_FRAMEWORK = {
@@ -143,15 +128,6 @@ DJOSER = {
        },
        'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
    }
-
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'viktrols0506@gmail.com'
-EMAIL_HOST_PASSWORD = 'lurmuvfxkeysqvoq'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
