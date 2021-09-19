@@ -1,16 +1,18 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, mixins, status, permissions, viewsets
+from rest_framework import generics, status, permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Follow
-from .serializers import TokenSerializer, FollowSerializer, ShowFollowSerializer, UserSerializer
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin
+
 from foodgram.pagination import CustomPageNumberPaginator
 
+from .models import Follow
+from .serializers import (TokenSerializer, FollowSerializer,
+                          ShowFollowSerializer, UserSerializer)
 
 User = get_user_model()
 
@@ -30,26 +32,22 @@ class Login(ObtainAuthToken):
         serializer = TokenSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
-        token, created= Token.objects.get_or_create(user=user)
-        return Response(
-            {'auth_token': str(token)},
-            status=status.HTTP_200_OK
-        )
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'auth_token': str(token)},
+                        status=status.HTTP_200_OK)
 
 
 class Logout(APIView):
     def post(self, request):
         request.user.auth_token.delete()
-        return Response(
-            status=status.HTTP_204_NO_CONTENT
-        )
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class FollowApiView(APIView):
     permission_classes = [permissions.IsAuthenticated, ]
 
     def get(self, request, id):
-        data = {'user': request.user.id, 'following':id}
+        data = {'user': request.user.id, 'following': id}
         serializer = FollowSerializer(data=data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         serializer.save()

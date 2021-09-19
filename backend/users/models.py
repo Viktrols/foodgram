@@ -7,10 +7,10 @@ class User(AbstractUser):
     username = models.CharField(blank=False, max_length=150, unique=True)
     first_name = models.CharField(blank=False, max_length=150)
     last_name = models.CharField(blank=False, max_length=150)
-    
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
-    
+
     def __str__(self):
         return self.email
 
@@ -22,9 +22,10 @@ class Follow(models.Model):
                                   related_name='following')
 
     class Meta:
-        constraints = [ models.UniqueConstraint(fields=['user', 'following'], name='unique_following')]
+        constraints = [models.UniqueConstraint(fields=['user', 'following'],
+                       name='unique_following')]
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
-    
+
     def __str__(self):
         return f'{self.user} подписан на {self.following}'
