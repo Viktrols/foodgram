@@ -1,12 +1,7 @@
-
-http://localhost/recipes
-
-http://localhost/api/docs/
-
 # REST API для сервиса Foodgram - сайта с рецептами
 <тут подробное описание проекта>
 ## Подготовка и запуск проекта
-### Склонируйте репозиторий на локальную машину:
+### Склонировать репозиторий на локальную машину:
 ```
 git clone https://github.com/Viktrols/foodgram-project-react
 ```
@@ -28,15 +23,15 @@ docker-compose up -d --build
 ```
 ### Собрать статические файлы:
 ```
-docker-compose exec web python3 manage.py collectstatic --noinput
+docker-compose exec backend python manage.py collectstatic --noinput
 ```
 ### Применить миграции:
 ```
-docker-compose exec web python3 manage.py migrate --noinput
+docker-compose exec backend python manage.py migrate --noinput
 ```
 ### Создать суперпользователя Django:
 ```
-docker-compose exec web python manage.py createsuperuser
+docker-compose exec backend python manage.py createsuperuser
 ```
 ### Проект будет доступен по адресу http://localhost/recipes
 ### Документация API http://localhost/api/docs/
