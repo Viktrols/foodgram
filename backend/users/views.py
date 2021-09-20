@@ -17,16 +17,6 @@ from .serializers import (TokenSerializer, FollowSerializer,
 User = get_user_model()
 
 
-class UsersListApiView(ListModelMixin, GenericAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    pagination_class = CustomPageNumberPaginator
-    permission_classes = [permissions.AllowAny]
-
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
-
 class Login(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         serializer = TokenSerializer(data=request.data)
@@ -56,7 +46,7 @@ class FollowApiView(APIView):
     def delete(self, request, id):
         data = {'user': request.user.id, 'following': id}
         user = request.user
-        following = get_object_or_404(Follow, following__id=id)
+        following = get_object_or_404(User, id=id)
         serializer = FollowSerializer(data=data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         Follow.objects.get(user=user, following=following).delete()

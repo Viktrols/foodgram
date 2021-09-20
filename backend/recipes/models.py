@@ -66,6 +66,9 @@ class RecipeIngredients(models.Model):
     class Meta:
         verbose_name = 'Ингридиент в рецепте'
         verbose_name_plural = 'Ингридиенты в рецептах'
+    
+    def __str__(self):
+        return 'Ингридиент в рецепте'
 
 
 class RecipeTags(models.Model):
@@ -75,6 +78,9 @@ class RecipeTags(models.Model):
     class Meta:
         verbose_name = 'Тег рецепта'
         verbose_name_plural = 'Теги рецептов'
+    
+    def __str__(self):
+        return 'Тег рецепта'
 
 
 class Favorite(models.Model):

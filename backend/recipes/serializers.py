@@ -163,13 +163,12 @@ class FavouriteSerializer(serializers.ModelSerializer):
         user = self.context.get('request').user
         recipe_id = data['recipe'].id
         request_method = self.context.get('request').method
-        if (request_method == 'GET' and ShoppingList.objects.filter(
+        if (request_method == 'GET' and Favorite.objects.filter(
                 user=user, recipe__id=recipe_id).exists()):
-            raise ValidationError('Рецепт уже добавлен в список покупок')
-        recipe = get_object_or_404(Recipe, id=recipe_id)
+            raise ValidationError('Рецепт уже добавлен в избранное')
 
         if (request_method == 'DELETE' and not
-                Favorite.objects.filter(user=user, recipe=recipe).exists()):
+                Favorite.objects.filter(user=user, recipe_id=recipe_id).exists()):
             raise ValidationError('Этот рецепт не был добавлен в избранное')
         return data
 

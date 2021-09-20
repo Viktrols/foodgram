@@ -104,7 +104,6 @@ REST_FRAMEWORK = {
     ],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS':
@@ -116,7 +115,7 @@ REST_FRAMEWORK = {
 DJOSER = {
        'LOGIN_FIELD': 'email',
        'SERIALIZERS': { 
-           'user_create': 'users.serializers.UserCreateSerializer',
+           'user_create': 'users.serializers.UserRegistrationSerializer',
            'user': 'users.serializers.UserSerializer',
            'current_user': 'users.serializers.UserSerializer',
        },
@@ -126,7 +125,7 @@ DJOSER = {
            'user': ['rest_framework.permissions.IsAuthenticated'],
            'user_list': ['rest_framework.permissions.AllowAny']           
        },
-       'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+       #'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
    }
 
 STATIC_URL = '/static/'

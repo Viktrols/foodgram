@@ -29,16 +29,18 @@ class IngredientsViewSet(RetriveAndListViewSet):
     permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend]
     filterset_class = IngredientsFilter
+    pagination_class = None
 
 
 class TagsViewSet(RetriveAndListViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagsSerializer
     permission_classes = [permissions.AllowAny]
+    pagination_class = None
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    queryset = Recipe.objects.all().order_by('id')
+    queryset = Recipe.objects.all().order_by('-id')
     serializer_class = ShowRecipeSerializer
     permission_classes = [IsAuthorOrAdmin]
     filter_backends = [DjangoFilterBackend]
@@ -118,7 +120,7 @@ class DownloadShoppingCart(APIView):
         to_buy = []
         for item in ingredients_list:
             to_buy.append(f'{item} - {ingredients_list[item]["amount"]} '
-                          f'{ingredients_list[item]["measurement_unit"]}')
+                          f'{ingredients_list[item]["measurement_unit"]} \n')
 
         response = HttpResponse(to_buy, 'Content-Type: text/plain')
         response['Content-Disposition'] = 'attachment; filename="to_buy.txt"'

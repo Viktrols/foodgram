@@ -61,24 +61,24 @@ class FollowSerializer(serializers.ModelSerializer):
         model = Follow
         fields = ('user', 'following')
 
-    def validate(self, data):
-        user = self.context.get('request').user
-        following_id = data['following'].id
+    # def validate(self, data):
+    #     user = self.context.get('request').user
+    #     following_id = data['following'].id
 
-        if self.context.get('request').method == 'GET':
-            if Follow.objects.filter(user=user,
-                                     following__id=following_id).exists():
-                raise serializers.ValidationError(
-                    'Вы уже подписаны на этого пользователя')
-            if user.id == following_id:
-                raise serializers.ValidationError('Нельзя подписаться на себя')
+        # if self.context.get('request').method == 'GET':
+        #     if Follow.objects.filter(user=user,
+        #                              following__id=following_id).exists():
+        #         raise serializers.ValidationError(
+        #             'Вы уже подписаны на этого пользователя')
+        #     if user.id == following_id:
+        #         raise serializers.ValidationError('Нельзя подписаться на себя')
 
-        if (self.context.get('request').method == 'DELETE' and not
-                Follow.objects.filter(user=user,
-                                      following__id=following_id).exists()):
-            raise serializers.ValidationError(
-                'Вы не были подписаны на этого пользователя')
-        return data
+        # if (self.context.get('request').method == 'DELETE' and not
+        #         Follow.objects.filter(user=user,
+        #                               following__id=following_id).exists()):
+        #     raise serializers.ValidationError(
+        #         'Вы не были подписаны на этого пользователя')
+        # return data
 
 
 class ShowFollowSerializer(serializers.ModelSerializer):
