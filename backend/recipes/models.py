@@ -46,7 +46,8 @@ class Recipe(models.Model):
     tags = models.ManyToManyField(Tag, through='RecipeTags')
     ingredients = models.ManyToManyField(Ingredient,
                                          through='RecipeIngredients')
-    cooking_time = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    cooking_time = models.PositiveIntegerField(
+                    validators=[MinValueValidator(1)])
     image = models.ImageField(upload_to='recipes/', blank=False, null=False)
 
     class Meta:
@@ -66,7 +67,7 @@ class RecipeIngredients(models.Model):
     class Meta:
         verbose_name = 'Ингридиент в рецепте'
         verbose_name_plural = 'Ингридиенты в рецептах'
-    
+
     def __str__(self):
         return 'Ингридиент в рецепте'
 
@@ -78,7 +79,7 @@ class RecipeTags(models.Model):
     class Meta:
         verbose_name = 'Тег рецепта'
         verbose_name_plural = 'Теги рецептов'
-    
+
     def __str__(self):
         return 'Тег рецепта'
 

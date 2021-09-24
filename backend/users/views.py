@@ -23,9 +23,10 @@ class FollowApiView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def delete(self, request, id):
-        user = request.user 
+        user = request.user
         following = get_object_or_404(User, id=id)
-        subscription = get_object_or_404(Follow, user=user, following=following)
+        subscription = get_object_or_404(Follow, user=user,
+                                         following=following)
         subscription.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 

@@ -28,7 +28,8 @@ class CustomUserSerializer(UserSerializer):
         request = self.context.get('request')
         if not request or request.user.is_anonymous:
             return False
-        return Follow.objects.filter(user=self.context['request'].user, following=obj).exists()
+        return Follow.objects.filter(user=self.context['request'].user,
+                                     following=obj).exists()
 
 
 class FollowSerializer(serializers.ModelSerializer):
@@ -59,7 +60,7 @@ class FollowingRecipesSerializers(serializers.ModelSerializer):
 
 
 class ShowFollowSerializer(serializers.ModelSerializer):
-    
+
     is_subscribed = serializers.SerializerMethodField()
     recipes = serializers.SerializerMethodField()
     recipes_count = serializers.SerializerMethodField()

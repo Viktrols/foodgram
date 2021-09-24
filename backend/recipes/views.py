@@ -54,7 +54,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return ShowRecipeFullSerializer
         return AddRecipeSerializer
 
-
     @action(detail=True, permission_classes=[IsAuthorOrAdmin])
     def favorite(self, request, pk):
         data = {'user': request.user.id, 'recipe': pk}
@@ -85,7 +84,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def delete_shopping_cart(self, request, pk):
         user = request.user
         recipe = get_object_or_404(Recipe, id=pk)
-        shopping_list = get_object_or_404(ShoppingList, user=user, recipe=recipe)
+        shopping_list = get_object_or_404(ShoppingList,
+                                          user=user, recipe=recipe)
         shopping_list.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
