@@ -1,10 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.db.models import F
-from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
-from users.serializers import UserSerializer
+from users.serializers import CustomUserSerializer
 
 from .models import (Ingredient, Tag, Recipe, RecipeIngredients,
                      Favorite, ShoppingList)
@@ -36,8 +35,14 @@ class ShowRecipeIngredientsSerializer(serializers.ModelSerializer):
 
 
 class ShowRecipeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recipe
+        fields = ('id', 'name', 'image', 'cooking_time')
+
+
+class ShowRecipeFullSerializer(serializers.ModelSerializer):
     tags = TagsSerializer(many=True, read_only=True)
-    author = UserSerializer(read_only=True)
+    author = CustomUserSerializer(read_only=True)
     ingredients = serializers.SerializerMethodField()
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
@@ -66,12 +71,6 @@ class ShowRecipeSerializer(serializers.ModelSerializer):
                                            user=request.user).exists()
 
 
-class ShowRecipeLightSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Recipe
-        fields = ('id', 'name', 'image', 'cooking_time')
-
-
 class AddRecipeIngredientsSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
     amount = serializers.IntegerField()
@@ -83,7 +82,7 @@ class AddRecipeIngredientsSerializer(serializers.ModelSerializer):
 
 class AddRecipeSerializer(serializers.ModelSerializer):
     image = Base64ImageField()
-    author = UserSerializer(read_only=True)
+    author = CustomUserSerializer(read_only=True)
     ingredients = AddRecipeIngredientsSerializer(many=True)
     tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(),
                                               many=True)
@@ -106,7 +105,7 @@ class AddRecipeSerializer(serializers.ModelSerializer):
     def validate_cooking_time(self, data):
         if data <= 0:
             raise ValidationError('Время готовки не может быть'
-                                  ' отрицательным числом или нулем')
+                                  ' отрицательным числом или нулем!')
         return data
 
     def add_recipe_ingredients(self, ingredients, recipe):
@@ -160,22 +159,16 @@ class FavouriteSerializer(serializers.ModelSerializer):
         fields = ('user', 'recipe')
 
     def validate(self, data):
-        user = self.context.get('request').user
+        user = data['user']
         recipe_id = data['recipe'].id
-        request_method = self.context.get('request').method
-        if (request_method == 'GET' and Favorite.objects.filter(
-                user=user, recipe__id=recipe_id).exists()):
-            raise ValidationError('Рецепт уже добавлен в избранное')
-
-        if (request_method == 'DELETE' and not
-                Favorite.objects.filter(user=user, recipe_id=recipe_id).exists()):
-            raise ValidationError('Этот рецепт не был добавлен в избранное')
+        if Favorite.objects.filter(user=user, recipe__id=recipe_id).exists():
+            raise ValidationError('Рецепт уже добавлен в избранное!')
         return data
 
     def to_representation(self, instance):
         request = self.context.get('request')
         context = {'request': request}
-        return ShowRecipeLightSerializer(instance.recipe, context=context).data
+        return ShowRecipeSerializer(instance.recipe, context=context).data
 
 
 class ShoppingListSerializer(serializers.ModelSerializer):
@@ -187,21 +180,14 @@ class ShoppingListSerializer(serializers.ModelSerializer):
         fields = ('user', 'recipe')
 
     def validate(self, data):
-        user = self.context.get('request').user
+        user = data['user']
         recipe_id = data['recipe'].id
-        request_method = self.context.get('request').method
-        if (request_method == 'GET' and
-                ShoppingList.objects.filter(user=user,
-                                            recipe__id=recipe_id).exists()):
+        if ShoppingList.objects.filter(user=user,
+                                       recipe__id=recipe_id).exists():
             raise ValidationError('Рецепт уже добавлен в список покупок')
-
-        if (request_method == 'DELETE' and not
-            ShoppingList.objects.filter(user=user,
-                                        recipe_id=recipe_id).exists()):
-            raise ValidationError('Рецепт не был добавлен в список покупок')
         return data
 
     def to_representation(self, instance):
         request = self.context.get('request')
         context = {'request': request}
-        return ShowRecipeLightSerializer(instance.recipe, context=context).data
+        return ShowRecipeSerializer(instance.recipe, context=context).data

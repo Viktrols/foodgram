@@ -1,8 +1,9 @@
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from djoser.serializers import UserCreateSerializer, UserSerializer
 
-from recipes.serializers import ShowRecipeLightSerializer
+from recipes.models import Recipe
+
 from .models import Follow
 
 
@@ -15,11 +16,10 @@ class UserRegistrationSerializer(UserCreateSerializer):
         fields = ('email', 'username', 'first_name', 'last_name', 'password')
 
 
-class UserSerializer(UserSerializer):
+class CustomUserSerializer(UserSerializer):
+    is_subscribed = serializers.SerializerMethodField(read_only=True)
 
-    is_subscribed = serializers.SerializerMethodField()
-
-    class Meta(UserSerializer.Meta):
+    class Meta():
         model = User
         fields = ('id', 'email', 'username', 'first_name',
                   'last_name', 'is_subscribed')
@@ -28,29 +28,7 @@ class UserSerializer(UserSerializer):
         request = self.context.get('request')
         if not request or request.user.is_anonymous:
             return False
-        return obj.follower.filter(user=obj, following=request.user).exists()
-
-
-class TokenSerializer(serializers.Serializer):
-    email = serializers.EmailField(label='Email')
-    password = serializers.CharField(label='Password')
-
-    def validate(self, attrs):
-        email = attrs.get('email')
-        password = attrs.get('password')
-
-        if email and password:
-            user = authenticate(request=self.context.get('request'),
-                                email=email, password=password)
-            if not user:
-                msg = 'Неверные учетные данные.'
-                raise serializers.ValidationError(msg, code='authorization')
-        else:
-            msg = 'Запрос должен содержать email и пароль.'
-            raise serializers.ValidationError(msg, code='authorization')
-
-        attrs['user'] = user
-        return attrs
+        return Follow.objects.filter(user=self.context['request'].user, following=obj).exists()
 
 
 class FollowSerializer(serializers.ModelSerializer):
@@ -61,27 +39,27 @@ class FollowSerializer(serializers.ModelSerializer):
         model = Follow
         fields = ('user', 'following')
 
-    # def validate(self, data):
-    #     user = self.context.get('request').user
-    #     following_id = data['following'].id
+    def validate(self, data):
+        user = self.context.get('request').user
+        following_id = data['following'].id
+        if Follow.objects.filter(user=user,
+                                 following__id=following_id).exists():
+            raise serializers.ValidationError(
+                    'Вы уже подписаны на этого пользователя')
+        if user.id == following_id:
+            raise serializers.ValidationError('Нельзя подписаться на себя')
+        return data
 
-        # if self.context.get('request').method == 'GET':
-        #     if Follow.objects.filter(user=user,
-        #                              following__id=following_id).exists():
-        #         raise serializers.ValidationError(
-        #             'Вы уже подписаны на этого пользователя')
-        #     if user.id == following_id:
-        #         raise serializers.ValidationError('Нельзя подписаться на себя')
 
-        # if (self.context.get('request').method == 'DELETE' and not
-        #         Follow.objects.filter(user=user,
-        #                               following__id=following_id).exists()):
-        #     raise serializers.ValidationError(
-        #         'Вы не были подписаны на этого пользователя')
-        # return data
+class FollowingRecipesSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model = Recipe
+        fields = ('id', 'name', 'image', 'cooking_time')
 
 
 class ShowFollowSerializer(serializers.ModelSerializer):
+    
     is_subscribed = serializers.SerializerMethodField()
     recipes = serializers.SerializerMethodField()
     recipes_count = serializers.SerializerMethodField()
@@ -106,8 +84,8 @@ class ShowFollowSerializer(serializers.ModelSerializer):
         else:
             recipes = obj.recipes.all()
         context = {'request': request}
-        return ShowRecipeLightSerializer(recipes, many=True,
-                                         context=context).data
+        return FollowingRecipesSerializers(recipes, many=True,
+                                           context=context).data
 
     def get_recipes_count(self, obj):
         return obj.recipes.count()
