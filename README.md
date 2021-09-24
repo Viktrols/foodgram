@@ -11,8 +11,8 @@ SECRET_KEY=<секретный ключ проекта django>
 
 DB_ENGINE=django.db.backends.postgresql
 DB_NAME=<имя базы данных postgres>
-DB_USER=<имя пользователя>
-DB_PASSWORD=<пароль>
+POSTGRES_USER=<пользователь бд>
+POSTGRES_PASSWORD=<пароль>
 DB_HOST=db
 DB_PORT=5432
 
