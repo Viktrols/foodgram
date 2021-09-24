@@ -1,8 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models.fields import PositiveIntegerField, TextField
-from django.db.models.fields.related import ForeignKey
 
 User = get_user_model()
 
