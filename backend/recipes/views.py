@@ -116,7 +116,6 @@ def get_ingredients_list(recipes_list):
     return to_buy
 
 
-# отдельно на случай, если нам нужно будет скачать другой какой-нибудь список
 def download_file_response(list_to_download, filename):
     response = HttpResponse(list_to_download, 'Content-Type: text/plain')
     response['Content-Disposition'] = f'attachment; filename="{filename}"'

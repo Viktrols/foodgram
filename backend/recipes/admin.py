@@ -11,6 +11,7 @@ class TagAdmin(admin.ModelAdmin):
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'measurement_unit')
+    list_filter = ['name']
 
 
 class RecipeIngredientsInline(admin.TabularInline):
@@ -27,8 +28,12 @@ class RecipeTagsInline(admin.TabularInline):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'author')
+    list_display = ('pk', 'name', 'author', 'in_favorite')
+    list_filter = ['name', 'author', 'tags']
     inlines = (RecipeIngredientsInline, RecipeTagsInline)
+
+    def in_favorite(self, obj):
+        return obj.in_favorite.all().count()
 
 
 @admin.register(Favorite)
