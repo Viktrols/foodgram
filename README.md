@@ -33,5 +33,8 @@ docker-compose exec backend python manage.py migrate --noinput
 ```
 docker-compose exec backend python manage.py createsuperuser
 ```
+docker-compose exec backend python manage.py loaddata fixtures/ingredients.json
 ### Проект будет доступен по адресу http://localhost/recipes
 ### Документация API http://localhost/api/docs/
+
+P.S. Фильтрация по имени ингридиента в админке выглядит очень странно? согласна! Сделано по ТЗ, хотя смысла не имеет, ведь есть поиск
