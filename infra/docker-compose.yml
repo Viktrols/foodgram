@@ -3,7 +3,7 @@ services:
 
   db:
     env_file:
-      - .env
+      - ./pg.env
     image: postgres:12.4
     volumes:
       - postgres_data:/var/lib/postgresql/data/

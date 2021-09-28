@@ -6,6 +6,7 @@ on:
       - "**"
     paths-ignore:
       - '**/README.md'
+      - '**/docker-compose.yml'
 
 jobs:
   build_and_push_to_docker_hub:
