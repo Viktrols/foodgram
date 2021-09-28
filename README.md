@@ -102,6 +102,6 @@ TELEGRAM_TOKEN=<токен вашего бота>
 nikita@reviewer.ru
 test0101
 ```
-## Образы доступны на DockerHub: [бекенд](https://hub.docker.com/repository/docker/viktrols/foodgram) и [фронтенд](https://hub.docker.com/repository/docker/viktrols/foodgram-frontend)
+### Образы доступны на DockerHub: [бекенд](https://hub.docker.com/repository/docker/viktrols/foodgram) и [фронтенд](https://hub.docker.com/repository/docker/viktrols/foodgram-frontend)
 P.S. Фильтрация по имени ингридиента в админке выглядит очень странно? согласна! Сделано по ТЗ, хотя смысла не имеет, ведь есть поиск!
 
