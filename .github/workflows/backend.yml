@@ -29,40 +29,40 @@ jobs:
           context: backend/
           tags: viktrols/foodgram:latest
 
-  # deploy:
-  #   if: github.ref == 'refs/heads/master'
-  #   runs-on: ubuntu-latest
-  #   needs: build_and_push_to_docker_hub
-  #   steps:
-  #     - name: executing remote ssh commands to deploy
-  #       uses: appleboy/ssh-action@master
-  #       with:
-  #         host: ${{ secrets.HOST }}
-  #         username: ${{ secrets.USER }}
-  #         key: ${{ secrets.SSH_KEY }}
-  #         passphrase: ${{ secrets.PASSPHRASE }}
-  #         script: |
-  #           sudo docker pull viktrols/foodgram:latest
-  #           sudo docker-compose stop
-  #           sudo docker-compose rm backend
-  #           touch .env 
-  #           echo SECRET_KEY=${{ secrets.SECRET_KEY }} > .env
-  #           echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
-  #           echo DB_NAME=${{ secrets.DB_NAME }} >> .env
-  #           echo DB_USER=${{ secrets.DB_USER }} >> .env
-  #           echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
-  #           echo DB_HOST=${{ secrets.DB_HOST }} >> .env
-  #           echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-  #           sudo docker-compose -f docker-compose.yaml up -d
+  deploy:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    needs: build_and_push_to_docker_hub
+    steps:
+      - name: executing remote ssh commands to deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          script: |
+            sudo docker pull viktrols/foodgram:latest
+            sudo docker-compose stop
+            sudo docker-compose rm backend
+            touch .env 
+            echo SECRET_KEY=${{ secrets.SECRET_KEY }} > .env
+            echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
+            echo DB_NAME=${{ secrets.DB_NAME }} >> .env
+            echo DB_USER=${{ secrets.DB_USER }} >> .env
+            echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
+            echo DB_HOST=${{ secrets.DB_HOST }} >> .env
+            echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+            sudo docker-compose -f docker-compose.yaml up -d
   
-  # send_message:
-  #   if: github.ref == 'refs/heads/master'
-  #   runs-on: ubuntu-latest
-  #   needs: deploy
-  #   steps:
-  #   - name: Telegram notification
-  #     uses: appleboy/telegram-action@master
-  #     with:
-  #       to: ${{ secrets.TG_CHAT_ID }}
-  #       token: ${{ secrets.TELEGRAM_TOKEN }}
-  #       message: ${{ github.workflow }} выполнен! Ура!!!
+  send_message:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+    - name: Telegram notification
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TG_CHAT_ID }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        message: ${{ github.workflow }} выполнен! Ура!!!
