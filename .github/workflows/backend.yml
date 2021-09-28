@@ -45,14 +45,6 @@ jobs:
             sudo docker pull viktrols/foodgram:latest
             sudo docker-compose stop
             sudo docker-compose rm backend
-            touch .env 
-            echo SECRET_KEY=${{ secrets.SECRET_KEY }} > .env
-            echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
-            echo DB_NAME=${{ secrets.DB_NAME }} >> .env
-            echo DB_USER=${{ secrets.DB_USER }} >> .env
-            echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
-            echo DB_HOST=${{ secrets.DB_HOST }} >> .env
-            echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             sudo docker-compose -f docker-compose.yaml up -d
   
   send_message:
