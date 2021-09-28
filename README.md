@@ -38,3 +38,5 @@ docker-compose exec backend python manage.py loaddata fixtures/ingredients.json
 ### Документация API http://localhost/api/docs/
 
 P.S. Фильтрация по имени ингридиента в админке выглядит очень странно? согласна! Сделано по ТЗ, хотя смысла не имеет, ведь есть поиск!
+
+docker-compose exec backend python manage.py loaddata fixtures/ingredients.json
