@@ -25,9 +25,9 @@ git clone https://github.com/Viktrols/foodgram-project-react
 ### В файле infra/nginx.conf в строке server_name впишите 127.0.0.1 localhost
 ### Соберите docker-compose (из директории infra):
 ```
-sudo docker-compose up -d --build
+docker-compose up -d --build
 ```
-## Для работы с удаленным сервером:
+## Для работы с удаленным сервером (на ubuntu):
 ### Выполните вход на свой удаленный сервер
 
 ### Установите docker на сервер:
@@ -108,5 +108,4 @@ nikita@reviewer.ru
 test0101
 ```
 ### Образы доступны на DockerHub: [бекенд](https://hub.docker.com/repository/docker/viktrols/foodgram) и [фронтенд](https://hub.docker.com/repository/docker/viktrols/foodgram-frontend)
-P.S. Фильтрация по имени ингридиента в админке выглядит очень странно? согласна! Сделано по ТЗ, хотя смысла не имеет, ведь есть поиск!
 
