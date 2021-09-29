@@ -16,16 +16,18 @@
 Foodgram - сервис для публикации рецептов. Авторизованные пользователи могут подписываться на понравившихся авторов, добавлять рецепты в избранное, в покупки, скачать список покупок.
 Неавторизованным пользователям доступна регистрация, авторизация, просмотр рецептов других авторов.
 
-## Workflow состоит из трёх шагов:
-- Сборка и публикация образа бекенда на DockerHub.
-- Автоматический деплой на удаленный сервер.
-- Отправка уведомления в телеграм-чат.
-
 ## Подготовка и запуск проекта
 ### Склонировать репозиторий на локальную машину:
 ```
 git clone https://github.com/Viktrols/foodgram-project-react
 ```
+## Для работы локально:
+### В файле infra/nginx.conf в строке server_name впишите 127.0.0.1 localhost
+### Соберите docker-compose (из директории infra):
+```
+sudo docker-compose up -d --build
+```
+## Для работы с удаленным сервером:
 ### Выполните вход на свой удаленный сервер
 
 ### Установите docker на сервер:
@@ -39,8 +41,8 @@ sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-
 ### Локально отредактируйте файл infra/nginx.conf и в строке server_name впишите свой IP
 ### Скопируйте файлы docker-compose.yml и nginx.conf из директории infra на сервер:
 ```
-scp docker-compose.yml <username>@<host>/home/<username>/docker-compose.yml
-scp default.conf <username>@<host>/home/<username>/nginx.conf
+scp docker-compose.yml <username>@<host>:/home/<username>/docker-compose.yml
+scp nginx.conf <username>@<host>:/home/<username>/nginx.conf
 ```
 ### На сервере создайте файл .env (nano .env) и заполните переменные окружения (или создайте этот файл локально и скопируйте файл по аналогии с предыдущим пунктом):
 ```
@@ -95,13 +97,16 @@ SSH_KEY=<ваш SSH ключ (для получения команда: cat ~/.s
 TG_CHAT_ID=<ID чата, в который придет сообщение>
 TELEGRAM_TOKEN=<токен вашего бота>
 ```
-
+## Workflow состоит из трёх шагов:
+- Сборка и публикация образа бекенда на DockerHub.
+- Автоматический деплой на удаленный сервер.
+- Отправка уведомления в телеграм-чат.
 ## Для ревью проект будет доступен по адресу http://84.201.163.135
 ### Вход на сайт/в админку:
 ```
 nikita@reviewer.ru
 test0101
 ```
-## Образы доступны на DockerHub: [бекенд](https://hub.docker.com/repository/docker/viktrols/foodgram) и [фронтенд](https://hub.docker.com/repository/docker/viktrols/foodgram-frontend)
+### Образы доступны на DockerHub: [бекенд](https://hub.docker.com/repository/docker/viktrols/foodgram) и [фронтенд](https://hub.docker.com/repository/docker/viktrols/foodgram-frontend)
 P.S. Фильтрация по имени ингридиента в админке выглядит очень странно? согласна! Сделано по ТЗ, хотя смысла не имеет, ведь есть поиск!
 
