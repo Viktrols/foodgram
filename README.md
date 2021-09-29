@@ -39,8 +39,8 @@ sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-
 ### Локально отредактируйте файл infra/nginx.conf и в строке server_name впишите свой IP
 ### Скопируйте файлы docker-compose.yml и nginx.conf из директории infra на сервер:
 ```
-scp docker-compose.yml <username>@<host>/home/<username>/docker-compose.yml
-scp nginx.conf <username>@<host>/home/<username>/nginx.conf
+scp docker-compose.yml <username>@<host>:/home/<username>/docker-compose.yml
+scp nginx.conf <username>@<host>:/home/<username>/nginx.conf
 ```
 ### На сервере создайте файл .env (nano .env) и заполните переменные окружения (или создайте этот файл локально и скопируйте файл по аналогии с предыдущим пунктом):
 ```
