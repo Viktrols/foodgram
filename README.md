@@ -21,12 +21,6 @@ Foodgram - сервис для публикации рецептов. Автор
 ```
 git clone https://github.com/Viktrols/foodgram-project-react
 ```
-## Для работы локально:
-### В файле infra/nginx.conf в строке server_name впишите 127.0.0.1 localhost
-### Соберите docker-compose (из директории infra):
-```
-docker-compose up -d --build
-```
 ## Для работы с удаленным сервером (на ubuntu):
 ### Выполните вход на свой удаленный сервер
 
@@ -109,3 +103,4 @@ test0101
 ```
 ### Образы доступны на DockerHub: [бекенд](https://hub.docker.com/repository/docker/viktrols/foodgram) и [фронтенд](https://hub.docker.com/repository/docker/viktrols/foodgram-frontend)
 
+P.S. Если у вас другая ОС и не все команды из вышеперечисленных работают, вы всегда можете воспользоваться [гуглом](https://www.google.com/), вы ж программист! (даже если и начинающий)
