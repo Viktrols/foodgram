@@ -1,4 +1,4 @@
-![yamdb_workflow](https://github.com/Viktrols/foodgram-project-react/actions/workflows/backend.yml/badge.svg?branch=master)
+![yamdb_workflow](https://github.com/Viktrols/foodgram/actions/workflows/backend.yml/badge.svg?branch=master)
 
 
 [![Python](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
@@ -95,7 +95,7 @@ TELEGRAM_TOKEN=<токен вашего бота>
 - Сборка и публикация образа бекенда на DockerHub.
 - Автоматический деплой на удаленный сервер.
 - Отправка уведомления в телеграм-чат.
-## Для ревью проект будет доступен по адресу http://84.201.163.135
+## Проект временно доступен по адресу http://84.201.163.135
 ### Вход на сайт/в админку:
 ```
 nikita@reviewer.ru
